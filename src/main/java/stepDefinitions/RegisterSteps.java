@@ -1,168 +1,116 @@
 package stepDefinitions;
 
 import static org.junit.Assert.assertTrue;
+
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import base.BaseUtil;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import pages.IncomePage;
+import pages.OutComePage;
 
-public class RegisterSteps {
+public class RegisterSteps extends BaseUtil {
 
-	WebDriver webDriver;
+	private BaseUtil base = new BaseUtil();
 
 	@Before
-	public void setUp() {
+	public void setUpTest() {
 		System.setProperty("webdriver.chrome.driver", "C:\\WebDrivers\\chromedriver.exe");
-		webDriver = new ChromeDriver();
+		base.Driver = new ChromeDriver();
 	}
 
 	@After
-	public void tearDown() {
-		webDriver.quit();
+	public void tearDownTest() {
+		base.Driver.quit();
 	}
 
 	@Given("the parking attendant is on the  Income page")
 	public void attendantOnIncomePage() {
-		webDriver.get("http://localhost:4200/registroparqueo/registroentrada");
+
+		base.Driver.get("http://localhost:4200/registroparqueo/registroentrada");
+
 	}
 
 	@When("the parking attendant register the Income info")
 	public void attendantRegisterIncomeInfo() {
-		
-		WebElement dateBox = webDriver.findElement(By.name("fecha"));
-		dateBox.sendKeys("09092013");
-		dateBox.sendKeys(Keys.TAB);
-		dateBox.sendKeys("0245PM");
-		
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 
-		webDriver.findElement(By.name("placa")).sendKeys("BCH321");
+		IncomePage page = new IncomePage(base.Driver);
 
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		page.fillDateTimeInput("09092013", "0245PM");
+		page.fillVehicleInputs("BCH321", "MOTO", "600");
+		page.btnClick();
 
-		webDriver.findElement(By.name("tipo")).sendKeys("MOTO");
-
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
-		webDriver.findElement(By.name("cilindraje")).sendKeys("600");
-
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
-		webDriver.findElement(By.className("btn")).click();
 	}
 
 	@Then("the parking attendant should see a Success message")
 	public void attendantSeeSuccessMessage() {
 
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		
-		String msj =webDriver.findElement(By.xpath("html/body")).getText();
+		waitforaFew(5000);
+
+		String msj = base.Driver.findElement(By.xpath("html/body")).getText();
 		assertTrue(msj.contains("Registro Entrada Exitoso"));
-		
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
+
+		waitforaFew(3000);
+
 	}
-	
-	
+
 	@Given("the parking attendant is on the  outcome page")
 	public void attendantOnOutcomePage() {
-		webDriver.get("http://localhost:4200/registroparqueo/registrosalida/HZJ505");
+		base.Driver.get("http://localhost:4200/registroparqueo/registrosalida/HZJ505");
 	}
 
 	@When("the parking attendant register the outcome info")
 	public void attendantRegisterOutcomeInfo() {
-		
-		
-		WebElement dateBox = webDriver.findElement(By.name("fechas"));
-		dateBox.sendKeys("14082018");
-		dateBox.sendKeys(Keys.TAB);
-		dateBox.sendKeys("0245PM");
 
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
-		webDriver.findElement(By.className("btn")).click();
+		OutComePage oPage = new OutComePage(base.Driver);
+		
+		oPage.fillDateTimeInput("14082018","0245PM");
+	
+		waitforaFew(3000);
+		
+		oPage.btnClick();
 	}
 
 	@Then("the parking attendant should see an exit Success message")
 	public void attendantSeeExitSuccessMessage() {
 
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		
-		String msj =webDriver.findElement(By.xpath("html/body")).getText();
+		waitforaFew(5000);
+
+		String msj = base.Driver.findElement(By.xpath("html/body")).getText();
 		assertTrue(msj.contains("Registro Salida"));
-		
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-	}@Given("the parking attendant is on the  list page")
-	public void attendantOnListcomePage() {
-		webDriver.get("http://localhost:4200/registroparqueo");
+
+		waitforaFew(3000);
+
 	}
 
-
+	@Given("the parking attendant is on the  list page")
+	public void attendantOnListcomePage() {
+		base.Driver.get("http://localhost:4200/registroparqueo");
+	}
 
 	@Then("the parking attendant should see an List")
 	public void attendantSeeList() {
 
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		
-		String msj =webDriver.findElement(By.xpath("html/body")).getText();
+		waitforaFew(5000);
+
+		String msj = base.Driver.findElement(By.xpath("html/body")).getText();
 		assertTrue(msj.contains("Vehiculos Actualmente en el Parqueadero"));
-		
+
+		waitforaFew(3000);
+
+	}
+
+	public void waitforaFew(long sec) {
 		try {
-			Thread.sleep(3000);
+			Thread.sleep(sec);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 }

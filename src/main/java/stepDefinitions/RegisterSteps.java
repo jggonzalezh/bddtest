@@ -1,12 +1,8 @@
 package stepDefinitions;
 
 import static org.junit.Assert.assertTrue;
-
 import org.openqa.selenium.By;
-import org.openqa.selenium.chrome.ChromeDriver;
 import base.BaseUtil;
-import cucumber.api.java.After;
-import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -16,17 +12,12 @@ import pages.OutComePage;
 public class RegisterSteps extends BaseUtil {
 
 	private BaseUtil base = new BaseUtil();
+	
 
-	@Before
-	public void setUpTest() {
-		System.setProperty("webdriver.chrome.driver", "C:\\WebDrivers\\chromedriver.exe");
-		base.Driver = new ChromeDriver();
+	public RegisterSteps(BaseUtil base) {
+		this.base=base;
 	}
-
-	@After
-	public void tearDownTest() {
-		base.Driver.quit();
-	}
+	
 
 	@Given("the parking attendant is on the  Income page")
 	public void attendantOnIncomePage() {
